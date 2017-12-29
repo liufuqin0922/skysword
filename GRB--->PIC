@@ -1,0 +1,37 @@
+今天看到一道misc的题目，得到一RGB值的txt文件，需解决RGB值转图片。具体题目：here
+
+　　由于第一次碰到这个类型的题目，做一下记录，在这里我采用的是python 的PIL图像库
+
+　　具体思路：
+
+　　　　1.首先我们要先确定图片的size，既宽度高度
+
+　　　　　通过txt文件行数（61366=2*61*503，因为最后一行是空行，所以不在计算范围内）的整数分解
+
+　　　　　可以得到以下几个不同的size：503*122,1006*61,30683*2（x,y交换一下对图片不会有很大的变化，只是横着和竖着的区别）
+
+　　　　　所以我们接下来一共要试这3种不同size的转化，查看那张转化出来的图片是有实际意义的（啊喂，最后一个那么夸张想想也不是了好嘛：）
+
+　　　　2.接下来就是是用python的图片库来转换了，附上撸主的代码
+    
+    
+    #-*- coding:utf-8 -*-
+from PIL import Image
+import re
+
+x = 503 #x坐标  通过对txt里的行数进行整数分解
+y = 122 #y坐标  x*y = 行数
+
+im = Image.new("RGB",(x,y))#创建图片
+file = open('misc100.txt') #打开rbg值文件
+
+#通过一个个rgb点生成图片
+for i in range(0,x):
+    for j in range(0,y):
+        line = file.readline()#获取一行
+        rgb = line.split(",")#分离rgb
+        im.putpixel((i,j),(int(rgb[0]),int(rgb[1]),int(rgb[2])))#rgb转化为像素
+im.show()
+
+
+Pillow
