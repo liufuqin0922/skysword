@@ -4,7 +4,7 @@
 # grep -f shbj.txt isdn.txt >xxhh.txt
 # grep -f xxhh.txt B.txt >>result.txt
 
-awk -F, '$2>0 && $8>0 {print $2}' B.txt | sort | uniq -c | sort -k1nr | awk '$1>100' >test
+awk -F, '$2>0 && $8>0 {print $2}' B.txt | sort | uniq -c | sort -k1nr | awk '$1>100' >tmp
 while read num line
 do
 	isdn=${line:0:7}
@@ -15,7 +15,4 @@ do
 		bb=`grep $others isdn_all.txt`
 		echo $num $line ${aa:8} $other ${bb:8} $calltype $dur
 	done 
-done < test
-
-# do echo;echo $i;export a=`expr substr $i 1 7`;grep $a isdn_all.txt;
-# done >test.txt
+done < tmp
