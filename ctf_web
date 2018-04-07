@@ -13,3 +13,7 @@ http://www.owasp.org.cn/
 http://www.cnvd.org.cn/
 http://cve.mitre.org/
 http://cve.scap.org.cn/
+
+
+http://market.finance.sina.com.cn/downxls.php?date=2011-07-08&symbol=sh600900
+获取代码为sh600900，在2011-07-08的成交明细，数据为xls格式。
