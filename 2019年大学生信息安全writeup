@@ -1,0 +1,47 @@
+逆向easyGo
+操作内容：
+
+一开始并没有反应过来这是go语言的逆向，只以为是一道linux的C语言逆向，所以直接拖进IDA可是发现没有mian函数，看汇编又啥都看不出来，毕竟我没有系统学习过逆向，然后才从名字联想到go语言，这是一个去符号的go程序，所以IDA添加了IDAGolangHelper这个插件以后，才能看到函数名，而且函数也减少到了8个，但是我还是看不懂，只知道有个base64加密，于是，我把程序放到linux下用gdb断点调试，直接发现了flag
+
+
+
+FLAG值：
+
+flag{92094daf-33c9-431e-a85a-8bfbd5df98ad}
+
+�0�2
+
+密码warmup
+操作内容：
+
+分为两次输入第一次输入一个a，第二次输入很多a，如图
+
+
+
+按照第一次返回的长度截取第二次返回的内容，然后因为AES加密算法的CTR模式，同一次加密中每个字符的加密秘钥不同，但是在同一次连接中第二次加密的秘钥与顺序和第一次加密完全相同，由于第二次输入我们知道了明文密文，还知道是与秘钥与或加密，所以我们把密文先从16进制转码为ascii码，然后再与明文的ascii码与或运算得到秘钥，之后再把第一次的的返回内容从16进制转码，再与秘钥一一进行与或加密得到flag，贴上脚本
+
+import binascii
+
+morea = "50f086ec698cec5f948b8f1b90a21c8164718113dad1e1ac9a06e49fe19557f98f786a388f3de01b02303ca5a0fedc55"  # 输入特别长的a返回截取只输入一个a的长度
+onea = "50f78bec6f96b40ec3d98f48c7f450d23071855f8f85e1fed65ee6c8e5d900aa8d296e3bdf38e348066820c1c49ab831"  # 只输入一个a返回
+moreas = binascii.unhexlify(morea)
+oneas = binascii.unhexlify(onea)
+
+x = []
+flag = []
+for i in moreas:
+    x.append(i^97)
+
+for i in range(0,len(x)):
+    flag.append(oneas[i]^x[i])
+
+flags = ""
+for i in flag:
+    flags = flags + str(chr(i))
+print(flags)
+�0�2
+
+FLAG值：
+
+flag{9063a267-25ae-45a3-9c6e-62c0eb1db2e9}
+
